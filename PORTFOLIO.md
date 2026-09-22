@@ -9,13 +9,13 @@
 
 ### Suggested website image gallery
 
-![Cover](assets/01_cover.png)
+![Cover](assets/01_cover.svg)
 
-![Data pipeline](assets/02_data_pipeline.png)
+![Data pipeline](assets/02_data_pipeline.svg)
 
-![Data/model view](assets/03_data_or_model.png)
+![Class imbalance/model strategy](assets/03_data_or_model.svg)
 
-![Evaluation/results view](assets/04_evaluation_or_results.png)
+![Evaluation/results](assets/04_evaluation_or_results.svg)
 
 ### Suggested portfolio copy
-This project demonstrates imbalanced learning, precision-recall, class weighting, robust evaluation using a reproducible workflow with explicit data provenance, processing, evaluation, limitations, and research documentation. The repository includes executable code and a scientific-style technical report suitable for supervisor review.
+This project studies how class imbalance changes model behavior using real observations only. It compares ordinary and class-weighted classifiers, evaluates them with Average Precision and F1, and shows why accuracy alone can be misleading when positive cases are rare. The repository includes executable code, real empirical results, reproducibility documentation, and a scientific-style technical report.
