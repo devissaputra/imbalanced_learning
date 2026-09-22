@@ -1,0 +1,14 @@
+{
+  "logistic": {
+    "average_precision": 0.9924242424242424,
+    "f1": 0.9090909090909091
+  },
+  "balanced_logistic": {
+    "average_precision": 0.9924242424242424,
+    "f1": 0.9565217391304348
+  },
+  "balanced_rf": {
+    "average_precision": 1.0,
+    "f1": 1.0
+  }
+}
