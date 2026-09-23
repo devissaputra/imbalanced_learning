@@ -1,14 +1,30 @@
 {
-  "logistic": {
-    "average_precision": 0.9924242424242424,
-    "f1": 0.9090909090909091
+  "seed": 42,
+  "class_counts": {
+    "0": 212,
+    "1": 35
   },
-  "balanced_logistic": {
-    "average_precision": 0.9924242424242424,
-    "f1": 0.9565217391304348
-  },
-  "balanced_rf": {
-    "average_precision": 1.0,
-    "f1": 1.0
+  "models": {
+    "logistic": {
+      "average_precision": 0.9924242424242424,
+      "f1": 0.9090909090909091,
+      "precision": 0.9090909090909091,
+      "recall": 0.9090909090909091,
+      "balanced_accuracy": 0.9467329545454546
+    },
+    "balanced_logistic": {
+      "average_precision": 0.9924242424242424,
+      "f1": 0.9565217391304348,
+      "precision": 0.9166666666666666,
+      "recall": 1.0,
+      "balanced_accuracy": 0.9921875
+    },
+    "balanced_rf": {
+      "average_precision": 1.0,
+      "f1": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "balanced_accuracy": 1.0
+    }
   }
 }

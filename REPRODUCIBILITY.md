@@ -1,6 +1,6 @@
-# Reproducing the Experiment
+# Reproducing the experiment
 
-Run:
+Use Python 3.11 or another current Python 3 release compatible with the dependency ranges.
 
 ```bash
 python -m venv .venv
@@ -9,10 +9,19 @@ pip install -r requirements.txt
 python src/run_experiment.py
 ```
 
-The script uses seed 42 for the class-1 subsample, the train/test split, and the Random Forest.
+The controlled minority sample, split, logistic models, and Random Forest all use seed 42. The controlled dataset contains 212 class-0 observations and 35 class-1 observations.
 
-The controlled dataset contains 212 class-0 observations and 35 class-1 observations. The same seed is important because changing the selected minority examples can change the results noticeably.
+Outputs:
 
-Metrics are saved to `results/metrics.json`, and the class-balance and precision-recall plots are regenerated in `assets/`.
+- `results/metrics.json`
+- `results/figures/class_balance.png`
+- `results/figures/precision_recall.png`
 
-If you compare results across machines, record your Python and scikit-learn versions.
+Run tests with:
+
+```bash
+pip install pytest
+pytest
+```
+
+GitHub Actions runs the same tests on every push and pull request. Exact floating-point values may move slightly across library versions, so committed metrics are treated as a recorded run.

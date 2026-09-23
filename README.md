@@ -1,61 +1,63 @@
 # Learning from Imbalanced Data
 
+[![CI](https://github.com/devissaputra/imbalanced_learning/actions/workflows/ci.yml/badge.svg)](https://github.com/devissaputra/imbalanced_learning/actions/workflows/ci.yml)
+
 ![Project overview](assets/01_cover.svg)
 
-I built this project to see how class imbalance changes model behaviour, especially when the less common class is the one I care about detecting.
+A controlled experiment on how class imbalance changes model behaviour and why **accuracy alone is a poor summary when the minority class matters**.
 
-Rather than generating synthetic rows, I start with real observations from the Wisconsin Diagnostic Breast Cancer dataset and create a controlled imbalance by keeping all class-0 cases and only a seeded subset of class-1 cases.
+## Question
 
-## Data setup
+> What changes when the same real observations are modeled with ordinary logistic regression, class-weighted logistic regression, and a class-weighted Random Forest?
 
-The original data come from scikit-learn's breast cancer dataset. For this experiment I keep:
+The study uses real observations from scikit-learn's Wisconsin Diagnostic Breast Cancer dataset and creates a deterministic minority-class scenario. It does **not** invent synthetic patients.
 
-- 212 observations from class 0;
-- 35 observations from class 1.
+## Controlled data setup
 
-This is a deliberately imbalanced study design. It is not meant to represent real medical prevalence.
+- all 212 class-0 observations are retained
+- 35 class-1 observations are selected with seed 42
+- total controlled sample: 247
+- stratified 70/30 train/test split
 
-More detail is in [DATA.md](DATA.md).
+This setup is a methodological exercise. It is not a claim about real disease prevalence.
 
-## How the experiment works
+## Models
 
 ![Processing pipeline](assets/02_data_pipeline.svg)
 
-I compare three models:
+1. standard logistic regression
+2. logistic regression with `class_weight="balanced"`
+3. Random Forest with `class_weight="balanced"`
 
-1. standard logistic regression;
-2. logistic regression with `class_weight="balanced"`;
-3. Random Forest with `class_weight="balanced"`.
+Logistic models are scaled inside scikit-learn pipelines.
 
-The data are split 70/30 with stratification. Logistic regression is fitted inside a scaling pipeline. The Random Forest uses 350 trees.
-
-Because accuracy can be misleading on imbalanced data, I focus on Average Precision and F1.
-
-## What class weighting changes
+## Why several metrics matter
 
 ![Class imbalance and model strategy](assets/03_data_or_model.svg)
 
-Class weighting does not create new samples. It changes the cost of mistakes during training so the less common class has more influence on the fitted model.
+The repository reports:
 
-That makes it a useful first comparison before moving to oversampling or synthetic-data methods.
+- **Average Precision** for precision-recall ranking quality
+- **F1** for the precision/recall trade-off at threshold 0.5
+- **Precision**
+- **Recall**
+- **Balanced accuracy**
 
-## Results
+Those metrics answer different questions. A model can rank cases well but still use a poor operating threshold.
+
+## Recorded results
+
+| Model | Avg. Precision | F1 | Precision | Recall | Balanced Acc. |
+|---|---:|---:|---:|---:|---:|
+| Logistic | 0.9924 | 0.9091 | 0.9091 | 0.9091 | 0.9467 |
+| Balanced logistic | 0.9924 | 0.9565 | 0.9167 | **1.0000** | 0.9922 |
+| Balanced Random Forest | **1.0000** | **1.0000** | **1.0000** | **1.0000** | **1.0000** |
 
 ![Evaluation summary](assets/04_evaluation_or_results.svg)
 
-The recorded run produced:
+The perfect Random Forest result should be read cautiously. The held-out minority sample is very small and the imbalance was deliberately constructed. This is precisely why the repository keeps the limitations visible instead of presenting the score as deployment evidence.
 
-| Model | Average Precision | F1 |
-|---|---:|---:|
-| Logistic regression | 0.9924 | 0.9091 |
-| Balanced logistic regression | 0.9924 | 0.9565 |
-| Balanced Random Forest | 1.0000 | 1.0000 |
-
-The balanced logistic model improved F1 without changing Average Precision in this split. The Random Forest reached perfect scores on the held-out sample.
-
-I do not treat that perfect result as proof of a perfect model. The test set is small and the imbalance was created for this experiment. Repeated validation would be needed before drawing a stronger conclusion.
-
-## Run it
+## Run
 
 ```bash
 python -m venv .venv
@@ -64,11 +66,31 @@ pip install -r requirements.txt
 python src/run_experiment.py
 ```
 
-On Windows, use `.venv\Scripts\activate`.
+Generated metrics and figures are written under `results/`.
 
-## Repository notes
+## Test
 
-- [DATA.md](DATA.md) explains the sampling setup.
-- [REPRODUCIBILITY.md](REPRODUCIBILITY.md) explains how to repeat the experiment.
-- [ETHICS.md](ETHICS.md) explains why these results should not be treated as a medical decision rule.
-- [paper/paper.md](paper/paper.md) contains the longer technical write-up.
+```bash
+pip install pytest
+pytest
+```
+
+Tests verify deterministic minority sampling, metric ranges, and output structure.
+
+## Engineering improvements
+
+- import-safe experiment module
+- deterministic sampling and model seeds
+- reusable data/model/evaluation functions
+- behavioural tests instead of file-existence-only tests
+- GitHub Actions CI
+- generated plots separated from curated SVG portfolio graphics
+- explicit responsible-use documentation
+
+## Limitations
+
+This benchmark is small, medical, and intentionally altered to create imbalance. A serious study would repeat the experiment across seeds, include confidence intervals, evaluate threshold selection on a validation set, and validate on external data.
+
+## Responsible use
+
+Nothing here is a medical decision rule. See [ETHICS.md](ETHICS.md).
