@@ -1,8 +1,13 @@
 # Data
 
-**Dataset:** Wisconsin Diagnostic Breast Cancer dataset  
-**Reference page:** https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html
+The starting point is scikit-learn's Wisconsin Diagnostic Breast Cancer dataset.
 
-This project uses a real public dataset distributed through the relevant scientific Python dataset loader. The experiment does not replace missing source data with randomly generated observations.
+Source documentation: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html
 
-For reproducibility, the code loads the dataset programmatically and records the sample size in `results/metrics.json` where applicable. Consult the source page for the original dataset description, citation, and usage terms.
+For this experiment I create a controlled imbalance from the original observations:
+
+- all 212 class-0 rows are kept;
+- 35 class-1 rows are selected with a seeded random sample;
+- no synthetic rows are generated.
+
+The resulting dataset is intentionally artificial in its class balance. It is useful for studying class weighting, but it should not be interpreted as a realistic estimate of medical prevalence.
