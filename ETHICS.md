@@ -1,5 +1,7 @@
-# Ethics and Responsible Use
+# Ethics and Limits
 
-This project is a research and learning artifact. Its models are not intended for autonomous high-stakes decisions.
+This experiment uses a medical dataset to study class imbalance. The class proportions in this repository are deliberately changed for the experiment, so they must not be read as real disease prevalence.
 
-For human-related datasets, predictions should be treated as decision support, not labels of a person's ability or worth. Validate subgroup performance, document missingness and measurement bias, preserve privacy, and keep a human reviewer in the loop. For non-human datasets, document domain limits and avoid presenting benchmark performance as universal model quality.
+The models are not clinical tools. The perfect Random Forest score in one small held-out set is especially easy to overinterpret.
+
+A real medical application would require representative data, external validation, subgroup analysis, careful threshold selection, and clinical review.
