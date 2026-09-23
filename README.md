@@ -77,20 +77,12 @@ pytest
 
 Tests verify deterministic minority sampling, metric ranges, and output structure.
 
-## Engineering improvements
+## What changed under reweighting
 
-- import-safe experiment module
-- deterministic sampling and model seeds
-- reusable data/model/evaluation functions
-- behavioural tests instead of file-existence-only tests
-- GitHub Actions CI
-- generated plots separated from curated SVG portfolio graphics
-- explicit responsible-use documentation
+The balanced logistic model recovers the minority class more reliably on this split without sacrificing much precision. The Random Forest reaches a perfect held-out score, but that result is exactly where caution is needed: the minority test set is small and the class distribution was deliberately constructed for this experiment.
 
-## Limitations
+The repository is designed to make that tension visible. A headline accuracy number is not enough when the rare class is the one we care about.
 
-This benchmark is small, medical, and intentionally altered to create imbalance. A serious study would repeat the experiment across seeds, include confidence intervals, evaluate threshold selection on a validation set, and validate on external data.
+## What I would test next
 
-## Responsible use
-
-Nothing here is a medical decision rule. See [ETHICS.md](ETHICS.md).
+I would repeat the experiment across multiple random seeds, add confidence intervals, choose operating thresholds on a separate validation set, and test the same methods on a naturally imbalanced dataset. Nothing here is a medical decision rule; see [ETHICS.md](ETHICS.md).
