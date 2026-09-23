@@ -2,6 +2,8 @@
 
 [![CI](https://github.com/devissaputra/imbalanced_learning/actions/workflows/ci.yml/badge.svg)](https://github.com/devissaputra/imbalanced_learning/actions/workflows/ci.yml)
 
+
+**Category:** AI Engineering
 ![Project overview](assets/01_cover.svg)
 
 A controlled experiment on how class imbalance changes model behaviour and why **accuracy alone is a poor summary when the minority class matters**.
