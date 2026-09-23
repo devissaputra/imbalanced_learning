@@ -1,6 +1,5 @@
 # Quick Description
 
-I create a controlled class-imbalance experiment from real breast-cancer observations and compare standard logistic regression, class-weighted logistic regression, and a class-weighted Random Forest. I focus on Average Precision and F1 rather than relying on accuracy.
+A controlled class-imbalance experiment using real breast-cancer benchmark observations. It compares ordinary logistic regression, balanced logistic regression, and a balanced Random Forest using Average Precision, F1, precision, recall, and balanced accuracy.
 
-**Dataset:** Wisconsin Diagnostic Breast Cancer  
-**Main ideas:** class imbalance, class weighting, precision-recall, F1
+**Main ideas:** imbalanced learning, class weighting, precision-recall evaluation, threshold-aware interpretation, reproducibility

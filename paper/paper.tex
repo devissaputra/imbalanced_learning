@@ -1,30 +1,33 @@
 \documentclass[11pt]{article}
 \usepackage[margin=1in]{geometry}
-\usepackage{hyperref}
+\usepackage{booktabs}
 \title{Learning from Imbalanced Data}
 \author{Devis W. Saputra}
 \begin{document}
 \maketitle
 
 \begin{abstract}
-I create a controlled class imbalance from real Wisconsin Diagnostic Breast Cancer observations and compare standard and class-weighted classifiers. The experiment focuses on Average Precision and F1 instead of raw accuracy.
+This experiment creates a deterministic minority-class setting from real Wisconsin Diagnostic Breast Cancer observations and compares ordinary logistic regression, class-weighted logistic regression, and a class-weighted Random Forest.
 \end{abstract}
 
-\section{Question}
-How much does class weighting change performance when one class is deliberately made much less common?
-
-\section{Data and Method}
-I keep all 212 class-0 observations and a seeded subset of 35 class-1 observations. I compare standard logistic regression, balanced logistic regression, and a balanced Random Forest with 350 trees.
+\section{Method}
+All 212 class-0 observations are retained and 35 class-1 observations are selected with seed 42. A stratified 70/30 split is used. Evaluation reports Average Precision, F1, precision, recall, and balanced accuracy.
 
 \section{Results}
-The logistic model reaches 0.9924 Average Precision and 0.9091 F1. Balanced logistic regression keeps the same Average Precision and improves F1 to 0.9565. The balanced Random Forest reaches 1.0000 for both metrics on this split.
+\begin{tabular}{lrrrrr}
+\toprule
+Model & AP & F1 & Precision & Recall & Bal. Acc. \\
+\midrule
+Logistic & 0.9924 & 0.9091 & 0.9091 & 0.9091 & 0.9467 \\
+Balanced logistic & 0.9924 & 0.9565 & 0.9167 & 1.0000 & 0.9922 \\
+Balanced RF & 1.0000 & 1.0000 & 1.0000 & 1.0000 & 1.0000 \\
+\bottomrule
+\end{tabular}
+
+\section{Interpretation}
+Class weighting improves minority recall for logistic regression in this split. The perfect Random Forest result is not treated as deployment evidence because the held-out minority sample is small and the imbalance is deliberately constructed.
 
 \section{Limitations}
-The class balance is created for the experiment and does not represent real medical prevalence. The held-out set is small, so the perfect Random Forest result should not be generalized.
+A stronger study would repeat minority subsampling across seeds, report uncertainty intervals, separate threshold selection from final testing, and validate on external data.
 
-\section{Reproduction}
-Install \texttt{requirements.txt} and run \texttt{python src/run\_experiment.py}.
-
-\bibliographystyle{plain}
-\bibliography{references}
 \end{document}
