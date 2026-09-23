@@ -1,89 +1,74 @@
-# 03. Learning from Imbalanced Real Data ★★★
+# Learning from Imbalanced Data
 
-![Cover](assets/01_cover.svg)
+![Project overview](assets/01_cover.svg)
 
-> **Quick description:** Study class weighting under a controlled rare-positive sampling scenario derived only from real observations.
+I built this project to see how class imbalance changes model behaviour, especially when the less common class is the one I care about detecting.
 
-## Why this project matters
-This AI Engineering project examines a common failure mode in classification: **class imbalance**. A model can achieve deceptively strong overall performance while still missing the minority class that matters most.
+Rather than generating synthetic rows, I start with real observations from the Wisconsin Diagnostic Breast Cancer dataset and create a controlled imbalance by keeping all class-0 cases and only a seeded subset of class-1 cases.
 
-The experiment uses the real **Wisconsin Diagnostic Breast Cancer dataset**, creates a controlled rare-positive scenario using only authentic observations, and compares standard and class-weighted models using metrics that are appropriate for imbalance.
+## Data setup
 
-## Dataset
-- **Dataset:** Wisconsin Diagnostic Breast Cancer
-- **Source:** scikit-learn's `load_breast_cancer`
-- **Real observations only:** no synthetic examples are invented
-- **Data provenance and usage:** [DATA.md](DATA.md)
+The original data come from scikit-learn's breast cancer dataset. For this experiment I keep:
 
-## Research pipeline
-![Data processing pipeline](assets/02_data_pipeline.svg)
+- 212 observations from class 0;
+- 35 observations from class 1.
 
-### Processing steps
-1. Load the real WDBC observations.
-2. Construct a controlled rare-positive training scenario from those observations.
-3. Split training and held-out evaluation data reproducibly.
-4. Standardize features using training data only where required.
-5. Compare an ordinary logistic model against class-weighted models.
-6. Evaluate with **Average Precision** and **F1**, not accuracy alone.
+This is a deliberately imbalanced study design. It is not meant to represent real medical prevalence.
 
-## Class imbalance and model strategy
+More detail is in [DATA.md](DATA.md).
+
+## How the experiment works
+
+![Processing pipeline](assets/02_data_pipeline.svg)
+
+I compare three models:
+
+1. standard logistic regression;
+2. logistic regression with `class_weight="balanced"`;
+3. Random Forest with `class_weight="balanced"`.
+
+The data are split 70/30 with stratification. Logistic regression is fitted inside a scaling pipeline. The Random Forest uses 350 trees.
+
+Because accuracy can be misleading on imbalanced data, I focus on Average Precision and F1.
+
+## What class weighting changes
+
 ![Class imbalance and model strategy](assets/03_data_or_model.svg)
 
-### Why class weighting?
-Class weighting changes the optimization cost so mistakes on the minority class contribute more strongly to the loss. It does **not** manufacture new examples. That makes it a useful baseline before trying oversampling or synthetic-data methods.
+Class weighting does not create new samples. It changes the cost of mistakes during training so the less common class has more influence on the fitted model.
 
-## Evaluation results
-![Evaluation results](assets/04_evaluation_or_results.svg)
+That makes it a useful first comparison before moving to oversampling or synthetic-data methods.
 
-Generated metrics from the included experiment:
+## Results
 
-```json
-{
-  "logistic": {
-    "average_precision": 0.9924242424242424,
-    "f1": 0.9090909090909091
-  },
-  "balanced_logistic": {
-    "average_precision": 0.9924242424242424,
-    "f1": 0.9565217391304348
-  },
-  "balanced_rf": {
-    "average_precision": 1.0,
-    "f1": 1.0
-  }
-}
-```
+![Evaluation summary](assets/04_evaluation_or_results.svg)
 
-### Interpretation
-- Standard logistic regression already ranks minority-class cases very well in this controlled setup.
-- Class weighting improves the **F1 score** of logistic regression from **0.9091** to **0.9565**.
-- The balanced Random Forest achieves perfect AP and F1 on this particular held-out split.
-- That perfect score should **not** be treated as evidence of universal performance. It is a result from a small, controlled experiment and needs repeated validation.
+The recorded run produced:
 
-## Reproduce
+| Model | Average Precision | F1 |
+|---|---:|---:|
+| Logistic regression | 0.9924 | 0.9091 |
+| Balanced logistic regression | 0.9924 | 0.9565 |
+| Balanced Random Forest | 1.0000 | 1.0000 |
+
+The balanced logistic model improved F1 without changing Average Precision in this split. The Random Forest reached perfect scores on the held-out sample.
+
+I do not treat that perfect result as proof of a perfect model. The test set is small and the imbalance was created for this experiment. Repeated validation would be needed before drawing a stronger conclusion.
+
+## Run it
+
 ```bash
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 python src/run_experiment.py
 ```
 
-Metrics are written to `results/metrics.json`.
+On Windows, use `.venv\Scripts\activate`.
 
-## Research documentation
-- [Scientific-style technical report](paper/paper.md)
-- [Quick description](QUICK_DESCRIPTION.md)
-- [Website-ready portfolio entry](PORTFOLIO.md)
-- [Data provenance](DATA.md)
-- [Reproducibility notes](REPRODUCIBILITY.md)
-- [Ethics and responsible use](ETHICS.md)
-- [Citation metadata](CITATION.cff)
+## Repository notes
 
-## Difficulty
-**★★★ — intermediate**
-
-## Academic integrity
-This repository is a research portfolio artifact, not a peer-reviewed publication. Reported metrics are generated by the included code. The controlled imbalance scenario uses only real observations, but results should not be generalized beyond this experimental setup without repeated or external validation.
-
-## Stronger research extension
-A publication-oriented extension would add repeated stratified cross-validation, precision-recall curves with uncertainty bands, threshold analysis, cost-sensitive decision rules, comparisons with oversampling methods, and external validation on another naturally imbalanced dataset.
+- [DATA.md](DATA.md) explains the sampling setup.
+- [REPRODUCIBILITY.md](REPRODUCIBILITY.md) explains how to repeat the experiment.
+- [ETHICS.md](ETHICS.md) explains why these results should not be treated as a medical decision rule.
+- [paper/paper.md](paper/paper.md) contains the longer technical write-up.
