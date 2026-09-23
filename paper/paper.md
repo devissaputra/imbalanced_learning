@@ -1,58 +1,52 @@
-# Learning from Imbalanced Real Data: Scientific-Style Technical Report
+# Learning from Imbalanced Data
 
-**Status:** reproducible portfolio report, not peer reviewed.  
-**Difficulty:** ★★★  
-**Dataset:** Wisconsin Diagnostic Breast Cancer dataset
+## Question
 
-## Abstract
-This project studies a concrete AI Engineering problem using a real public dataset and a fully inspectable pipeline. The project focuses on imbalanced learning, precision-recall, class weighting, robust evaluation. Its central engineering goal is to make data preparation, model fitting, evaluation, and limitations reproducible rather than treating the model as a black box.
+How much does class weighting change performance when one class is deliberately made much less common?
 
-## 1. Research objective
-Study class weighting under a controlled rare-positive sampling scenario derived only from real observations.
+## Data
 
-## 2. Data
-The dataset is **Wisconsin Diagnostic Breast Cancer dataset**. Provenance and the original reference are documented in [`DATA.md`](../DATA.md).
+I start with the Wisconsin Diagnostic Breast Cancer dataset. I keep all 212 observations from class 0 and a seeded subset of 35 observations from class 1.
 
-## 3. Method
-The implemented pipeline is:
-1. Load real data
-2. Controlled imbalance
-3. Scale
-4. Weighted classifiers
-5. PR evaluation
+Every row is still a real observation. The imbalance is created only by selecting a subset of the original data.
 
-## 4. Evaluation
-**Primary metric(s):** Average Precision / F1.  
-**Validation design:** stratified hold-out.  
-The experiment saves machine-readable metrics and visual diagnostics so claims can be traced to an executable run.
+This is an experimental setup, not an estimate of real medical prevalence.
 
-## 5. Results
-Generated metrics:
-```json
-{
-  "logistic": {
-    "average_precision": 0.9924242424242424,
-    "f1": 0.9090909090909091
-  },
-  "balanced_logistic": {
-    "average_precision": 0.9924242424242424,
-    "f1": 0.9565217391304348
-  },
-  "balanced_rf": {
-    "average_precision": 1.0,
-    "f1": 1.0
-  }
-}
+## Method
+
+I use a stratified 70/30 train/test split and compare three models:
+
+- standard logistic regression;
+- logistic regression with balanced class weights;
+- Random Forest with balanced class weights and 350 trees.
+
+The logistic models use standardized features.
+
+I evaluate Average Precision and F1 because both are more informative than raw accuracy for this setup.
+
+## Results
+
+| Model | Average Precision | F1 |
+|---|---:|---:|
+| Logistic regression | 0.9924 | 0.9091 |
+| Balanced logistic regression | 0.9924 | 0.9565 |
+| Balanced Random Forest | 1.0000 | 1.0000 |
+
+## Interpretation
+
+Class weighting improved the logistic model's F1 score in this split. The Random Forest reached perfect scores on the small held-out set.
+
+I do not interpret that perfect result as evidence that the model will generalize perfectly. The sample is small and the imbalance was constructed for the experiment.
+
+## Limitations
+
+The study uses one dataset, one seeded sampling design, and one hold-out split. The target labels also come from a medical dataset, so the exercise should not be treated as a clinical decision model.
+
+A stronger follow-up would repeat the subsampling many times, report uncertainty, compare threshold choices, and test resampling methods alongside class weighting.
+
+## Reproduce
+
+```bash
+pip install -r requirements.txt
+python src/run_experiment.py
 ```
-
-## 6. Limitations and validity
-Key concern: rare-class instability. Benchmark performance on one dataset does not imply universal performance. The project is intended to demonstrate research engineering discipline and to provide a base for stronger comparative studies.
-
-## 7. Reproducibility
-Run `python src/run_experiment.py` from the repository root after installing `requirements.txt`.
-
-## 8. Next research extension
-Add repeated cross-validation or temporal/external validation, stronger baselines, hyperparameter sensitivity, confidence intervals, and a domain-specific error analysis.
-
-## References
-- Dataset/reference page: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_breast_cancer.html
