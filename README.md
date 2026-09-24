@@ -12,12 +12,12 @@ A controlled experiment on how class imbalance changes model behaviour and why *
 
 > What changes when the same real observations are modeled with ordinary logistic regression, class-weighted logistic regression, and a class-weighted Random Forest?
 
-The study uses real observations from scikit-learn's Wisconsin Diagnostic Breast Cancer dataset and creates a deterministic minority-class scenario. It does **not** invent synthetic patients.
+The study uses real observations from scikit-learn's Wisconsin Diagnostic Breast Cancer dataset and creates a deterministic minority-class scenario. Here, class 1 is benign and is deliberately downsampled; it does **not** invent synthetic patients.
 
 ## Controlled data setup
 
-- all 212 class-0 observations are retained
-- 35 class-1 observations are selected with seed 42
+- all 212 class-0 (malignant) observations are retained
+- 35 class-1 (benign) observations are selected with seed 42
 - total controlled sample: 247
 - stratified 70/30 train/test split
 
