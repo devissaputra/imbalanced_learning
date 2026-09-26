@@ -1,0 +1,41 @@
+{
+  "question": "How does class weighting change minority-class recovery?",
+  "data": "Wisconsin Diagnostic Breast Cancer observations; retain 212 malignant cases and sample 35 benign cases.",
+  "method": "Stratified 70/30 split; ordinary and weighted logistic regression; weighted random forest.",
+  "formula": "Precision = TP/(TP+FP); recall = TP/(TP+FN); F1 = 2PR/(P+R).",
+  "interpretation": "Class 1 is benign in this constructed experiment. Average precision summarizes ranking; threshold metrics describe one operating point. The minority test sample is small, and the deliberately altered prevalence is not clinical prevalence.",
+  "status": "RECORDED SMALL-SAMPLE BENCHMARK | see validation scope",
+  "source": "results/metrics.json",
+  "rows": [
+    {
+      "label": "logistic",
+      "path": [
+        "models",
+        "logistic",
+        "f1"
+      ],
+      "unit": "minority F1 ↑"
+    },
+    {
+      "label": "balanced_logistic",
+      "path": [
+        "models",
+        "balanced_logistic",
+        "f1"
+      ],
+      "unit": "minority F1 ↑"
+    },
+    {
+      "label": "balanced_rf",
+      "path": [
+        "models",
+        "balanced_rf",
+        "f1"
+      ],
+      "unit": "minority F1 ↑"
+    }
+  ],
+  "table_title": "Selected recorded values (units and context shown)",
+  "evidence_note": "See CALCULATIONS.md for data status, execution scope and interpretation.",
+  "finding": "This controlled experiment uses real Wisconsin Diagnostic Breast Cancer observations to compare ordinary logistic regression, class-weighted logistic regression, and a weighted random forest. It deliberately makes benign cases the minority class, then reports average precision, recall, F1, and balanced accuracy on one stratified split. The recorded perfect forest score is retained alongside the small-sample limitation: it demonstrates the behavior of this setup, not clinical reliability."
+}

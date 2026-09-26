@@ -30,4 +30,10 @@ Class weighting improves minority recall for logistic regression in this split. 
 \section{Limitations}
 A stronger study would repeat minority subsampling across seeds, report uncertainty intervals, separate threshold selection from final testing, and validate on external data.
 
+\section{Calculation audit and reproduction scope}
+This controlled experiment uses real Wisconsin Diagnostic Breast Cancer observations to compare ordinary logistic regression, class-weighted logistic regression, and a weighted random forest. It deliberately makes benign cases the minority class, then reports average precision, recall, F1, and balanced accuracy on one stratified split. The recorded perfect forest score is retained alongside the small-sample limitation: it demonstrates the behavior of this setup, not clinical reliability.
+
+Class 1 is benign in this constructed experiment. Average precision summarizes ranking; threshold metrics describe one operating point. The minority test sample is small, and the deliberately altered prevalence is not clinical prevalence.
+
+See the repository calculation guide for exact source paths. The full experiment was not independently rerun during this documentation review.
 \end{document}

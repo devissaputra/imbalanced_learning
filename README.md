@@ -1,10 +1,26 @@
 # Learning from Imbalanced Data
 
+This controlled experiment uses real Wisconsin Diagnostic Breast Cancer observations to compare ordinary logistic regression, class-weighted logistic regression, and a weighted random forest. It deliberately makes benign cases the minority class, then reports average precision, recall, F1, and balanced accuracy on one stratified split. The recorded perfect forest score is retained alongside the small-sample limitation: it demonstrates the behavior of this setup, not clinical reliability.
+
+## Start here
+
+- [Calculations, evidence and verification scope](CALCULATIONS.md)
+- [Figure sources and exact numerical paths](docs/figure_spec.json)
+- [Working paper](paper/paper.md)
+- [Data and provenance](DATA.md)
+
+![Study question, data, design and interpretation](assets/review_overview.svg)
+
+![Defined calculation and source-linked evidence](assets/review_calculations.svg)
+
+**Review scope:** The existing suite requires unavailable dependencies; no full-suite pass is claimed. The complete data/model experiment was not rerun in this review.
+
+## Detailed project documentation
+
 [![CI](https://github.com/devissaputra/imbalanced_learning/actions/workflows/ci.yml/badge.svg)](https://github.com/devissaputra/imbalanced_learning/actions/workflows/ci.yml)
 
 
 **Category:** AI Engineering
-![Project overview](assets/01_cover.svg)
 
 A controlled experiment on how class imbalance changes model behaviour and why **accuracy alone is a poor summary when the minority class matters**.
 
@@ -25,7 +41,6 @@ This setup is a methodological exercise. It is not a claim about real disease pr
 
 ## Models
 
-![Processing pipeline](assets/02_data_pipeline.svg)
 
 1. standard logistic regression
 2. logistic regression with `class_weight="balanced"`
@@ -35,7 +50,6 @@ Logistic models are scaled inside scikit-learn pipelines.
 
 ## Why several metrics matter
 
-![Class imbalance and model strategy](assets/03_data_or_model.svg)
 
 The repository reports:
 
@@ -55,7 +69,6 @@ Those metrics answer different questions. A model can rank cases well but still 
 | Balanced logistic | 0.9924 | 0.9565 | 0.9167 | **1.0000** | 0.9922 |
 | Balanced Random Forest | **1.0000** | **1.0000** | **1.0000** | **1.0000** | **1.0000** |
 
-![Evaluation summary](assets/04_evaluation_or_results.svg)
 
 The perfect Random Forest result should be read cautiously. The held-out minority sample is very small and the imbalance was deliberately constructed. This is precisely why the repository keeps the limitations visible instead of presenting the score as deployment evidence.
 

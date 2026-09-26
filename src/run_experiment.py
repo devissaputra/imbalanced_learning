@@ -1,3 +1,7 @@
+# Calculation reading guide: ../CALCULATIONS.md (repository root).
+# Precision = TP/(TP+FP); recall = TP/(TP+FN); F1 = 2PR/(P+R).
+# Class 1 is benign in this constructed experiment. Average precision summarizes ranking; threshold metrics describe one operating point. The minority test sample is small, and the deliberately altered prevalence is not clinical prevalence.
+
 from __future__ import annotations
 
 import json

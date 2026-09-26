@@ -1,5 +1,5 @@
-# Quick Description
+# Learning from Imbalanced Data
 
-A controlled class-imbalance experiment using real breast-cancer benchmark observations. It compares ordinary logistic regression, balanced logistic regression, and a balanced Random Forest using Average Precision, F1, precision, recall, and balanced accuracy.
+This controlled experiment uses real Wisconsin Diagnostic Breast Cancer observations to compare ordinary logistic regression, class-weighted logistic regression, and a weighted random forest. It deliberately makes benign cases the minority class, then reports average precision, recall, F1, and balanced accuracy on one stratified split. The recorded perfect forest score is retained alongside the small-sample limitation: it demonstrates the behavior of this setup, not clinical reliability.
 
-**Main ideas:** imbalanced learning, class weighting, precision-recall evaluation, threshold-aware interpretation, reproducibility
+See [CALCULATIONS.md](CALCULATIONS.md) for evidence and verification scope.

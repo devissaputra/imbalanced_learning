@@ -27,3 +27,32 @@ A stronger study would repeat the controlled subsampling across many seeds, repo
 ## Responsible use
 
 This is a machine-learning benchmark exercise, not a medical model.
+
+
+## Calculation definitions and evidence audit
+
+Precision = TP/(TP+FP); recall = TP/(TP+FN); F1 = 2PR/(P+R).
+
+Class 1 is benign in this constructed experiment. Average precision summarizes ranking; threshold metrics describe one operating point. The minority test sample is small, and the deliberately altered prevalence is not clinical prevalence.
+
+This controlled experiment uses real Wisconsin Diagnostic Breast Cancer observations to compare ordinary logistic regression, class-weighted logistic regression, and a weighted random forest. It deliberately makes benign cases the minority class, then reports average precision, recall, F1, and balanced accuracy on one stratified split. The recorded perfect forest score is retained alongside the small-sample limitation: it demonstrates the behavior of this setup, not clinical reliability.
+
+The [calculation guide](../CALCULATIONS.md) provides exact evidence paths and a function-level implementation map.
+
+![Study design](../assets/review_overview.svg)
+
+![Calculation and selected evidence](../assets/review_calculations.svg)
+
+### Selected evidence and interpretation
+
+| Quantity | Value | Unit / meaning | JSON path |
+|---|---:|---|---|
+| logistic | 0.9090909090909091 | minority F1 ↑ | `models.logistic.f1` |
+| balanced_logistic | 0.9565217391304348 | minority F1 ↑ | `models.balanced_logistic.f1` |
+| balanced_rf | 1.0 | minority F1 ↑ | `models.balanced_rf.f1` |
+
+These values are read from `results/metrics.json`. They must be interpreted with the split, data status and limitations above. The complete data/model experiment was not rerun in this review.
+
+### Reproduction and claim boundaries
+
+The existing suite requires unavailable dependencies; no full-suite pass is claimed. The figure generator can be checked with `python scripts/build_review_figures.py --check`. This verifies the displayed calculation evidence, not an independent replication of the complete scientific experiment. The manuscript is a working report, not a peer-reviewed publication.
